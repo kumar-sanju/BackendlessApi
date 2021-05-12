@@ -10,6 +10,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
+
+import java.util.List;
 
 public class ContactListActivity extends AppCompatActivity {
 
@@ -17,6 +25,7 @@ public class ContactListActivity extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
     ListView contactList;
+    ContactsAdapter contactsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +36,31 @@ public class ContactListActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
         contactList = findViewById(R.id.contactList);
+
+        String whereClause = "userEmail = '" + ApplicationClass.user.getEmail() + "'";
+
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+        queryBuilder.setGroupBy("name");
+
+//        showProgress(true);
+//        tvLoad.setText("Getting all contacts...Please wait...");
+
+        Backendless.Persistence.of(Contact.class).find(queryBuilder, new AsyncCallback<List<Contact>>() {
+            @Override
+            public void handleResponse(List<Contact> response) {
+                ApplicationClass.contacts = response;
+                contactsAdapter = new ContactsAdapter(ContactListActivity.this, ApplicationClass.contacts);
+                contactList.setAdapter(contactsAdapter);
+//                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(ContactListActivity.this, "Error: "+ fault.getMessage(), Toast.LENGTH_SHORT).show();
+//                            showProgress(false);
+            }
+        });
 
     }
 

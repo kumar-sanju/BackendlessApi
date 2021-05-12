@@ -5,6 +5,8 @@ import android.app.Application;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
+import java.util.List;
+
 public class ApplicationClass extends Application {
 
     public static final String SERVER_URL = "https://api.backendless.com";
@@ -12,6 +14,7 @@ public class ApplicationClass extends Application {
     public static final String API_KEY = "5A87C89C-21EA-4E99-B361-D987924B4C3B";
 
     public static BackendlessUser user;
+    public static List<Contact> contacts;
 
     @Override
     public void onCreate() {

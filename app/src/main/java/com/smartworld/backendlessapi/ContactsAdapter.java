@@ -34,7 +34,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact>
         TextView tvName = convertView.findViewById(R.id.tvName);
         TextView tvMail = convertView.findViewById(R.id.tvMail);
 
-//        tvChar.setText(contacts.get(contacts.get(position).getName().toUpperCase().charAt(0) + ""));
+        tvChar.setText(contacts.get(position).getName().toUpperCase().charAt(0) + "");
+        tvName.setText(contacts.get(position).getName());
+        tvMail.setText(contacts.get(position).getEmail());
 
         return convertView;
     }
